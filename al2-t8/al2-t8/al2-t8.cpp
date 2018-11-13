@@ -7,15 +7,15 @@ class Circle {
 	double r;
 public:
 	Circle(double a) { r = a; }
-	double square() { return (M_PI * r * r); }
+	double CLength() { return 2 * M_PI * r; }
 };
 
 int main()
 {
 	double a;
-	cout << "Enter a radius: "; cin >> a;
+	cout << "Enter radius: "; cin >> a;
 	Circle A(a);
-	cout << "Square of the circle is " << A.square() << endl;
+	cout << "Length of the circle is " << A.CLength() << endl;
 	system("pause");
 	return 0;
 }
