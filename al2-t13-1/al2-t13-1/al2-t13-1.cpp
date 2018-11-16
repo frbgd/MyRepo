@@ -21,12 +21,8 @@ int main()
 {
 	square A;
 	cube B;
-	square *ps = &A;
-	ps->Print();
-	ps = &B;
-	cube *pc = &B;
-	ps->Print();
-	pc->Print();
+	A.Print();
+	B.Print();
 	cout << endl;
 	system("pause");
 	return 0;
