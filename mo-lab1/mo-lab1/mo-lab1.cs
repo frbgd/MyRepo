@@ -14,7 +14,7 @@ namespace Lab1_mo
             Boolean check = true;
             for (int i = 0; i < Simplex.GetLength(1); i++)
             {
-                if (Simplex[Simplex.GetLength(0) - 1, i] < 0)
+                if (Simplex[Simplex.GetLength(0) - 1, i] > 0)
                 {
                     check = false;
                     break;
@@ -30,13 +30,11 @@ namespace Lab1_mo
             double check = 0;
             for (int i = 1; i < Simplex.GetLength(1); i++)
             {
-                if (Simplex[Simplex.GetLength(0) - 1, i] < 0)
+                if (Simplex[Simplex.GetLength(0) - 1, i] > 0)
                 {
-                    if (Simplex[Simplex.GetLength(0) - 1, i] < check)
-                    {
-                        check = Simplex[Simplex.GetLength(0) - 1, i];
-                        place = i;
-                    }
+                    check = Simplex[Simplex.GetLength(0) - 1, i];
+                    place = i;
+                    break;
                 }
             }
 
@@ -101,6 +99,9 @@ namespace Lab1_mo
             Console.WriteLine("F = -({0}X1+{1}X2+{2}X3) —>min ", c[0], c[1], c[2]);
             Console.WriteLine("{0}X1+{1}X2+{2}X3+X4 = {3} \n{4}X1+{5}X2+{6}X3+X5 = {7} \n{8}X1+{9}X2+{10}X3+X6 = {11}", A[0, 0], A[0, 1], A[0, 2], b[0], A[1, 0], A[1, 1], A[1, 2], b[1], A[2, 0], A[2, 1], A[2, 2], b[2]);
             Console.WriteLine("X1...X6>=0\n");
+            Console.WriteLine("F = -({0}X1+{1}X2+{2}X3) —>min ", c[0], c[1], c[2]);
+            Console.WriteLine("X4 = {3}-({0}X1+{1}X2+{2}X3) \nX5 = {7}-({4}X1+{5}X2+{6}X3) \nX6 = {11}-({8}X1+{9}X2+{10}X3)", A[0, 0], A[0, 1], A[0, 2], b[0], A[1, 0], A[1, 1], A[1, 2], b[1], A[2, 0], A[2, 1], A[2, 2], b[2]);
+            Console.WriteLine("X1...X6>=0\n");
         }
 
         static double[,] MakeSimplexTable(double[] c, double[,] A, double[] b, int variablesnum)
@@ -118,7 +119,7 @@ namespace Lab1_mo
                 }
             for (int i = 1; i < 4; i++)
             {
-                SimplexTable[3, i] = -c[i - 1];
+                SimplexTable[3, i] = c[i - 1];
             }
             return SimplexTable;
         }
@@ -160,9 +161,9 @@ namespace Lab1_mo
                 // Замена в названии строк и столбцов 
                 string buf = row[r];
                 Console.WriteLine("Iteration {0}:", counter);
-                Console.WriteLine("X{0} is resolving column", k);
+                Console.WriteLine("{0} is resolving column", column[k]);
                 Console.WriteLine("{0} is resolving row", buf);
-                Console.WriteLine("X{0} is now basic variable while {1} is free now", k, buf);
+                Console.WriteLine("{0} is now basic variable while {1} is free now", column[k], buf);
                 row[r] = column[k];
                 column[k] = buf;
                 // Пересчет таблицы 
@@ -178,7 +179,7 @@ namespace Lab1_mo
             Console.WriteLine("Solution : {0:#.###}", p);
             for (int i = 0; i < 3; i++)
             {
-                Console.WriteLine("{0} = {1:#.###}",
+                Console.WriteLine("{0} = {1}",
                 row[i], Simplex[i, 0]);
             }
             for (int i = 0; i < 3; i++)
@@ -187,10 +188,26 @@ namespace Lab1_mo
             }
             Console.WriteLine("\nChecking:");
             Console.WriteLine("F = {0}X1+{1}X2+{2}X3=", c[0], c[1], c[2]);
-            Console.WriteLine(" = {0}*0{3:#.###}+{1}*{4}+{2}*{5:#.###}={6:#.###}", c[0], c[1], c[2], Simplex[0, 0], Simplex[2, 1], Simplex[2, 0], c[0] * Simplex[0, 0] + c[1] * Simplex[2, 1] + c[2] * Simplex[2, 0]);
+            
+            double[] chkval = new double[3];
+            for (int i = 1; i < 4; i++)
+            {
+                for (int j = 0; j < 3; j++)
+                {
+                    if (row[j] == ("X" + i.ToString()))
+                    {
+                        chkval[j] = Simplex[i - 1, 0];
+                        break;
+                    }
+
+                    if (column[j] == ("X" + i.ToString()))
+                    {
+                        chkval[j] = 0;
+                    }
+                }
+            }
+            Console.WriteLine(" = {0}*{3}+{1}*{4}+{2}*{5}={6}", c[0], c[1], c[2], chkval[0], chkval[1], chkval[2], c[0] * chkval[0] + c[1] * chkval[1] + c[2]* chkval[2]);
         }
-
-
 
 
 
@@ -199,9 +216,10 @@ namespace Lab1_mo
         {
             // Начальные условия: 
             int VariablesNumber = 3;
-            double[] c = new double[3] { 3, 3, 7 };
-            double[,] A = new double[3, 3] { { 1, 1, 1 }, { 1, 4, 0 }, { 0, 0.5, 3 } };
-            double[] b = new double[3] { 3, 5, 7 };
+
+            double[] c = new double[3] { 5, 6, 4 };
+            double[,] A = new double[3, 3] { { 1, 1, 1 }, { 1, 3, 0 }, { 0, 0.5, 4 } };
+            double[] b = new double[3] { 7, 8, 6 };
 
             //Создание симплекс таблицы: 
             StartingConditions(c, A, b);
