@@ -10,7 +10,7 @@ namespace Lab1_mo
     {
         static Boolean CheckForOptimal(double[,] Simplex)
         {
-            // Проверка оптимальности решения по индексной строке 
+            // Проверка оптимальности решения по индексной строке (проверка отсутствия положительных элементов)
             Boolean check = true;
             for (int i = 0; i < Simplex.GetLength(1); i++)
             {
@@ -25,7 +25,7 @@ namespace Lab1_mo
 
         static int FindResolvingColumn(double[,] Simplex)
         {
-            // Нахождение разрешающего столбца 
+            // Нахождение разрешающего столбца (первого положительного элемента)
             int place = 0;
             double check = 0;
             for (int i = 1; i < Simplex.GetLength(1); i++)
@@ -99,6 +99,7 @@ namespace Lab1_mo
             Console.WriteLine("F = -({0}X1+{1}X2+{2}X3) —>min ", c[0], c[1], c[2]);
             Console.WriteLine("{0}X1+{1}X2+{2}X3+X4 = {3} \n{4}X1+{5}X2+{6}X3+X5 = {7} \n{8}X1+{9}X2+{10}X3+X6 = {11}", A[0, 0], A[0, 1], A[0, 2], b[0], A[1, 0], A[1, 1], A[1, 2], b[1], A[2, 0], A[2, 1], A[2, 2], b[2]);
             Console.WriteLine("X1...X6>=0\n");
+            //выражение через свободные переменные
             Console.WriteLine("F = -({0}X1+{1}X2+{2}X3) —>min ", c[0], c[1], c[2]);
             Console.WriteLine("X4 = {3}-({0}X1+{1}X2+{2}X3) \nX5 = {7}-({4}X1+{5}X2+{6}X3) \nX6 = {11}-({8}X1+{9}X2+{10}X3)", A[0, 0], A[0, 1], A[0, 2], b[0], A[1, 0], A[1, 1], A[1, 2], b[1], A[2, 0], A[2, 1], A[2, 2], b[2]);
             Console.WriteLine("X1...X6>=0\n");
@@ -188,7 +189,7 @@ namespace Lab1_mo
             }
             Console.WriteLine("\nChecking:");
             Console.WriteLine("F = {0}X1+{1}X2+{2}X3=", c[0], c[1], c[2]);
-            
+            //поиск значений X1, X2 и X3
             double[] chkval = new double[3];
             for (int i = 1; i < 4; i++)
             {
@@ -236,7 +237,6 @@ namespace Lab1_mo
             Console.WriteLine("\nPhase II-optimization:\n");
             //Использование симплекс метода: 
             SimplexMethod(Simplex, column, row, c);
-            Console.ReadLine();
         }
     }
 }
